@@ -24,23 +24,16 @@ import {NotImplementedError} from '../extensions/index.js';
  */
 export default function getDNSStats(domains) {
   if (domains.length === 0) return {};
-  let newArray = [];
-  for (const domain of domains) {
-    newArray.push(domain.split('.').reverse());
-  }
-  newArray = newArray.flat();
-  let res = Array.from(new Set(newArray));
-  if (res.length === 3) {
-    return {
-      [`.${res[0]}`]: 2,
-      [`.${res[0]}.${res[1]}`]: 2,
-      [`.${res[0]}.${res[1]}.${res[2]}`]: 1
+  let res = {};
+  for (let i = 0; i < domains.length; i++) {
+    let arr = [];
+    let str = '';
+    domains[i].replace(/\w+/g, match => arr.push(`.${match}`));
+    arr.reverse();
+    for (let i = 0; i < arr.length; i++) {
+      str += arr[i];
+      (typeof res[str] !== 'undefined') ? res[str] += 1 : res[str] = 1;
     }
   }
-  if (newArray.length === 2) {
-    return {
-      [`.${res[0]}`]: 1,
-      [`.${res[0]}.${res[1]}`]: 1
-    }
-  }
+  return res;
 }
