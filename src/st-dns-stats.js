@@ -23,7 +23,6 @@ import {NotImplementedError} from '../extensions/index.js';
  *
  */
 export default function getDNSStats(domains) {
-  if (domains.length === 0) return {};
   let res = {};
   for (let i = 0; i < domains.length; i++) {
     let arr = [];
